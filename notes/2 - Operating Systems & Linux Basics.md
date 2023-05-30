@@ -200,6 +200,188 @@ The /mnt or /media folders
 
 usually you will not interact with these folders when installing apps via Package Manager, this will be automatically managed via the Package Manager of the Operating system.
 
+Hiden files ( dot files)
+
+On Linux the fhiden files are usually starting with a "." it works for folders or files
+
+Used to prevent accidently deleting files 
+
+Into to Command Line (Part 1)
+------------------------------
+
+GUI vers CLI
+
+GUI : Graphical User Interface
+CLI : Command Line Interface
+
+Usually the servers have only the CLI 
+
+The CLI contains the prompt : 
+
+* username
+* computer name
+* current directory
+* $ sign for regular user
+* \# sign for super user
+
+Basic Linux Commands (CLI - Part 2)
+------------------------------------
+
+Directory operations 
+
+* pwd (Print current directory)
+* ls (List folder and files)
+* cd (Change directory)
+* mkdir (Make Directory)
+
+File operations
+
+* touch (Create a file)
+* rm (Remove files and folders)
+
+Everything in Linux is a File.
+
+Navigating in the filesystem
+
+* cd /usr/local/bin
+* cd ../.. going up on filesystem 
+
+There are 2 was , we can use relative path from the current directory or absolute path.
+
+To rename files and folders
+
+* mv file1 file2 (Rename files)
+* mv folder1 folder2 (Rename folders)
+
+To copy files and folders
+
+* cp file1 file2
+* cp folder1 folder2
+
+List files recursivly 
+
+* ls -R folder/ 
+
+List the history of commands lines
+
+* history
+
+List hidden files 
+
+* ls -a
+
+Display the content of a file
+
+* cat file
+* zcat file.tar.gz
+* less file
+* more file
+* tail file
+
+Why use CLI over GUI ?
+
+* Work more efficient
+* Bulk operations
+* More that GUI in term of functionality 
+
+Display OS informations 
+
+* uname (Kernel version, OS)
+* cat /etc/os-release
+* lscpu
+* lshw
+* lsmem
+
+Execute commands as superuser
+
+* sudo ls 
+* sudo su - root
+* sudo -c ls -u username
+
+Package Manager - Installing software
+------------------------------------
+
+Using a Package Manager Tools
+
+What is a package manager and a software package
+
+* A compressed archive, containing all the required files
+* And also all the depencies managed bw the Package Manager
+
+It will download, installs or updates existing software packages from a repository
+
+It will ensure the integrity and authenticity of a package
+
+It will known where to put files in the system hierarchy
+
+* Ubuntu : APT 
+* Debian : APT
+* Centos : DNF
+
+Find packages (Ubuntu Apt)
+
+* apt search openjdk
+
+Install a package (Ubunt Apt)
+
+* apt install openjdk-default
+
+Remove a package (Ubuntu Apt)
+
+* apt remove openjdk-default
+
+The packages come from repositories, each distribution have their own repositories, some third party application have also their own repositories
+
+To refresh metadata of the repositories you will need to run apt update
+
+You have other ways of installing a program which is not available in repositories on (Ubuntu) for example
+
+* snap package manager tool (bundle package with all dependencies)
+* add-apt-repository (third party repository) -update file /etc/apt/sources.list (PPA Personal Package Archive)
+
+Vi & Vim Text Editor
+------------------------------------
+
+Vi & Vim are text editor from command line
+
+Built-in common editor are usually vi or vim
+
+* small modifications can be faster
+* faster to create and edit at the same time
+* support multiple formats
+
+Use cases : 
+
+* when working in remote servers
+* git for writing the git commit message
+* display kubernetes configuration files 
+
+To install vim : 
+
+* sudo apt install vim
+
+Vim Editor has 2 modes 
+
+* Command Mode (default)
+* Insert Mode (Edition)
+
+From Commande Mode to Insert Mode : <i>
+
+To go back to command mode : <ESC>
+
+To save the file : <:wq>
+
+To not save the file : <:q!>
+
+
+
+
+
+
+
+
+
+
 
 
 
