@@ -373,6 +373,78 @@ To save the file : <:wq>
 
 To not save the file : <:q!>
 
+Other useful commands for Vim :
+
+dd for deleting line
+d10 for deleting the 10 next lines
+yy for yanking (copy)
+u for undo the changes (number of times necessary)
+Shit+A go to the end of a line and goes to insert mode
+0 go to the begining of a line and goes to insert mode
+<:2> goes to line number 2
+/ search for a pattern
+:%s/nginx/webapp Replacing using a pattern (from command mode)
+
+
+User & Permissions - Part 1
+------------------------------------
+
+* Super User (root)
+* Regular User 
+* Service User 
+
+Home folder is in /home/ path 
+
+Never run a service with the root use for security reason
+
+Always 1 Root user per computer and one or multiple regular user(s)
+
+Linux does not have central management of users.
+
+On servers multiple account is a best practice, as we need to track their activity with a kind of audit trail
+
+We can create groups to assign specific permissions instead of managing permissions on individual users.
+
+Access Control Files :
+
+* /etc/passwd
+* /etc/shadow
+* /etc/group
+
+Structure of a user in /etc/passwd file :
+
+USERNAME:PASSWORD:UID:GUID:GECOS:HOMEDIR:SHELL
+
+Creating a user :
+
+* sudo adduser tom
+
+Change password of a user : 
+
+* sudo passwd tom
+
+Create a Group : 
+
+* sudo groupadd devops
+
+adduser / addgroup is more interactive 
+useradd / groupadd is not interactive and you have to specify all the required information using options.
+
+Add a user to a group as primary group
+
+* sudo usermod -g devops tom
+
+Add a user to a group as secondary groups
+
+* sudo usermod -aG devops,othergroup tom 
+
+
+
+
+
+
+
+
 
 
 
