@@ -122,6 +122,88 @@ Advantage of Hypervisor Type 1 :
 * Efficient usage of hardware resources 
 * Abstraction of the Operating system from the hardware
 
+Linux File System
+---------------------
+
+Linux versus Windows file system
+
+Linux 
+
+* Hierarchical tree structure
+* 1 root folder
+
+Windows
+
+* Multiple root folders
+* Windows use letters for disks 
+* C internal drive
+* Next letters for the next drives
+
+On Linux
+
+* Every users have his own directory under /home/
+* The root directory is located on /
+* The root home folder is located in /root/ path
+
+Programs installed system wide are available to all users on the target computer
+
+The /bin directory 
+
+Contain the binary programs that are system wide
+
+The /sbin directory
+
+Contain the system binary files (superuser permission to execute them)
+
+The /lib directory
+
+Hold the libraries for the binary of the system or applications 
+
+The /usr directory
+
+Contain binary folders , some of them are stored in /bin and some in /usr folder
+
+The /usr/local folder
+
+This contain the application of user that install (binary, config ...) 
+
+The /opt directory (system wide)
+
+Thrid party application can be installed on /opt 
+Application that are not spliting their lib, binaries, configuration...
+
+The /boot directory
+
+It contains the boot images of the opearting system.
+
+The /etc directory 
+
+Contain all the configurations files 
+
+The /dev folder
+
+This contain all the device mapping files (mouse, disks, floppy, monitor...)
+
+The /var folder
+
+* Cache data
+* Logs data 
+
+The /tmp folder
+
+Stores temporary files needed for applications
+
+The /mnt or /media folders
+
+* /media for external media mount point
+* /mnt for manual filesystem mount
+
+usually you will not interact with these folders when installing apps via Package Manager, this will be automatically managed via the Package Manager of the Operating system.
+
+
+
+
+
 
 
 
