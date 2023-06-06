@@ -341,6 +341,121 @@ spec:
       port: 27017
       targetPort: 27017
 
+Namespaces Organizing Components 
+---------------------------------
+
+What is a namespaces ?
+
+By default Kubernetes gives you somes of them
+
+* kube-system (Do not create resources here)
+* kube-public 
+* kube-node-lease
+* default
+
+kubectl create namespace <nameofnamespace>
+
+* Group resources into namesapces is a best practice
+* In case of multiple teams that work on one cluster for the same application
+* When You need to have Staging or Production environements.
+* Limit access to specific users or temas
+* Limit resources at namespace scope
+
+Limits : ConfigMap and Secret can not be used accross namespaces
+
+Volume, Nodes and some other type of resources are not scoped to a namespace.
+
+List resources of a namespaces : 
+
+kubectl get <kind> -n <namespace_name>
+
+There is a tool called kubens which let you point to the namespace you want to work or check which one you are tied to.
+
+To install it on Windows : winget install kubens 
+
+Services - Connecting to Application inside cluster
+------------------------------------------------------
+
+* Cluster IP
+* Headless 
+* NodePort
+* LoadBalancer
+
+IP of the pod are ephemeral as they follow the lifecycle of the pod
+
+In  front of each pod we have a service with statis IP address.
+
+The service are also the features of load balancer.
+
+They can be usecul for internal and external communications.
+
+The Cluster IP : 
+
+* Default Type 
+* Internal Service
+* Specific Port 
+
+Pods are identified  by the selectors (labels of the pods)
+
+To see Service endpoints you can run kubectl get endpoints 
+
+You can have a multiple port service resource, but if so , you will need to name them in the manifest file 
+
+Example : 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-express-service
+spec:
+  selector:
+    app: mongo-express
+  type: LoadBalancer
+  ports:
+    - name: mongo-express
+      protocol: TCP
+      port: 8081
+      targetPort: 8081
+    - name: mongo-express-exporter
+      protocol: TCP
+      port: 9216
+      targetPort: 9216
+
+The Headless :
+
+* Client wants to communicate with 1 specific Pod directly
+* Pods want to talk directly with specific pod
+
+This is usefull in case of deployment of statefulset (databases)
+
+When creating a service just put ClusterIP: none this will be a headless service
+
+Node Port : 
+
+Create a service that is accessible on a static port on each worker node (External Access) (can be from 30000 - 32767)
+
+
+Load Balancer :
+
+Cloud Provider give LoadBalancer feature, you can also have for example metallb for on premise workload.
+
+Loadbalancer service is an extension of Nodeport Service
+Nodeport Service is an extension of ClusterIP Service
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
