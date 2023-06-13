@@ -714,6 +714,107 @@ data:
     <base64 encoded string>
 
 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosquitto
+  labels:
+    app: mosquitto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mosquitto
+  template:
+    metadata:
+      labels:
+        app: mosquitto
+  spec:
+    containers:
+      - name: mosquitto
+        image: eclipse-mosquitto:1.6.2
+        ports:
+          - containerPort: 1883
+
+When using key-value pairs on Secret or ConfigMap on the pod spec for the volume mounts use the following :
+
+valueFrom:
+  secretKeyRef:
+    name:
+    key:
+
+valueFrom:
+  configMapKeyRef:
+    name:
+    key: 
+
+
+StatefulSet - Deploying Stateful Applications 
+----------------------------------------------
+
+Kubernetes component used for stateful applications 
+
+Example of stateful applications : 
+
+* databses (mysql, postgres, elasticsearch)
+
+Keep records of the state of the application
+
+Deployment versus StatefulSet
+
+* Replicating stateful applications is more difficult
+* Other requirements
+
+Deployment : 
+
+* Identical and interchangable
+* Created in random order with random hashes
+* One service that load balances to any pod
+
+StatefulSet
+
+* Can't be created / deleted at same time
+* Can't be randomly addressed
+* Replica Pods are not identical 
+
+* Sticky identity for each pod
+* Created from same specification, but not interchangeable
+* Peristent identifier across any re-scheduling
+* Fixed ordered names ( $(statefulset name)-$(ordinal)) 
+
+Scaling database applications
+
+Multiple pods can not read and write and the same time, usually you will have a master which will read and write and the other worker that re reading only
+
+Each pods of a stateful set will use their own persistent volume.
+
+When new pod instance is created , the pod will sync from the previous pod (pod n -1)
+
+Create of pod in statefulset will create one pod at a time , verifying the state of the previous one
+
+Deleting pods or scaling down StatefulSet , will delete pods starting by the end of the pods identity.
+
+On StatefulSet there will be 2 Pod Endpoint
+
+* Loadbalancer service
+* Individual service name dedicated to each pod of the statefulset 
+
+Example : 
+
+mysql-0.svc2
+mysql-1.svc2
+mysql-2.svc2
+
+*{pod name}.${governing service domain}
+
+
+
+
+
+
+
+
+
 
 
 
