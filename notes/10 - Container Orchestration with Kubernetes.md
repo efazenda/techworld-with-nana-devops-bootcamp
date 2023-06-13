@@ -442,6 +442,33 @@ Cloud Provider give LoadBalancer feature, you can also have for example metallb 
 Loadbalancer service is an extension of Nodeport Service
 Nodeport Service is an extension of ClusterIP Service
 
+Ingress - Connecting to Applications outside cluster.
+-----------------------------------------------------
+
+Example : 
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myapp-ingress
+spec:
+  rules:
+  - host: myapp.com
+    http:
+      paths:
+      - backend:
+          serviceName: myapp-service-internal
+          servicePort: 8080
+
+Before using Ingress, you need to install an ingress controller
+
+The ingress controller will do :
+
+* evaluates all the rules
+* manages redirections
+* entrypoint to cluster
+
+
 
 
 
