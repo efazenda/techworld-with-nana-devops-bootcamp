@@ -468,6 +468,254 @@ The ingress controller will do :
 * manages redirections
 * entrypoint to cluster
 
+You can have multiple path for an application and this can be defined to the ingress resource of your application 
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myapp-ingress
+spec:
+  rules:
+  - host: myapp.com
+    http:
+      paths:
+      - path: /analytics
+        backend:
+          serviceName: myapp-analytics-service
+          servicePort: 8080
+      - path: /shopping
+        backend:
+          serviceName: myapp-shopping-service
+          servicePort: 8080
+
+For multiple sub-domains or domains
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: virtualhost-ingress
+spec:
+  rules:
+  - host: analytics.myapp.com
+    http:
+      paths:
+        backend:
+          serviceName: myapp-analytics-service
+          servicePort: 8080
+  - host: shopping.myapp.com
+    http:
+      paths:
+        backend:
+          serviceName: myapp-shopping-service
+          servicePort: 8080      
+
+Configuring TLS Certificate
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myapp-ingress
+spec:
+  tls:
+  - hosts:
+    - myapp.com
+    secretName: myapp-sercret-tls
+  rules:
+  - host: myapp.com
+    http:
+      paths:
+      - path: /analytics
+        backend:
+          serviceName: myapp-analytics-service
+          servicePort: 8080
+      - path: /shopping
+        backend:
+          serviceName: myapp-shopping-service
+          servicePort: 8080
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: myapp-sercret-tls
+data:
+  tls.crt: base64 encoded cert
+  tls.key: base64 encoded key
+type: kubernetes.io/tls
+
+The Secret must be located in the same namespace of the ingress.
+
+
+Volumes - Persisting Application Data
+-----------------------------------------------------
+
+How to perist data in Kubernetes using volumes ? 
+
+* Peristent Volume 
+* Persistent Volume Claim
+* Storage Class
+
+As pod are ephemeral , the data will be lost if pod restart.
+
+Storage must be available on all nodes as you don't know where the pod will restart.
+
+Storage needs to survive even if the cluster crashes
+
+A persistent volume is a cluster resource that can be created via YAMl file 
+
+kind: PersistentVolume
+
+The storage is not managed by Kubernetes Cluster , you need to provide it to the cluster.
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-name
+spec:
+  capacity:
+    storage: 5 Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeClaimPolicy: Recycle
+  storageClass: slow
+  mountOptions:
+    - hard
+    - nfsvers-4.8
+  nfs:
+    path: /dir/path/on/nfs/server
+    server: nfs-server-ip-address-or-fqdn
+
+Depending on storage type , the spec attributes will differ.
+
+Persistent Volumes are not namespaced resources 
+
+Local versus Remote Volume Types 
+
+Local volume types violate 2 and 3 requirement for data persistence :
+
+* Being tied to 1 specific node
+* Surviving cluster crashes
+
+Who creates the persistent volumes ?
+
+PV are resources that need to be there BEFORE the pod that depends on it is created.
+
+Application ask Peristent Volumes via Persistent Volume Claims resources
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-name
+spec:
+  storageClassName: manual
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10 Gi
+
+Use that PVC in pods configuration
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: nginx
+      volumeMounts:
+      - mountPath: "/var/www/html"
+        name: mypd
+  volumes:
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: pvc-name
+
+Levels of Volume abstractions
+
+Pod requests the volume through the PV claim
+Claim tries to find a volume in cluster
+Volume has the actual storage backend
+
+The PVC must be in the same namespace of the pod resource
+
+Volumes are mounted to the pods and after mounted to the specifics containers inside the pods 
+
+ConfigMap & Secret are volumes types 
+
+These are not created via PV and PVC
+
+Storage Class provisions persistent volumes dynamically when pvc claims it
+
+Example of a Storage Class (AWS)
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: storage-class-name
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: io1
+  iosperGB: "10"
+  fsType: ext4
+
+There are internal provisioner and external provisioner
+
+
+ConfigMap & Secret Volume Types 
+----------------------------------------
+
+Many configurations files are used by applications, to pass these configuration files to Kubernetes Pod that contain the application, we will need to use ConfigMap and Secret resources for confidential data.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-configmap
+data:
+  db_host: mongodb-service
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongodb-secret
+type: Opaque
+data:
+  username: <base64 encoded>
+  password: <base64 encoded>
+---
+
+
+ConfigMap and Secret for mounting files 
+
+* individual key value pairs 
+* create files
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mosquitto-config-files
+data:
+  mosquitto.conf: |
+    log_dest stdout
+    log_type all
+    log_timestamp true
+    listener 9801
+
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mosquitto-secret-file
+type: Opaque
+data:
+  secret.file: |
+    <base64 encoded string>
+
+
+
+
 
 
 
