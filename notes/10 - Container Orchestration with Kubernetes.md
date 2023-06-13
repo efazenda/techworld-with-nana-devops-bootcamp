@@ -807,6 +807,113 @@ mysql-2.svc2
 
 *{pod name}.${governing service domain}
 
+Managed K8S Service
+---------------------
+
+Managed versus Unmanaged K8S Cluster
+
+On Cloud (managed):
+
+* Create own cluster from scratch
+* Managed K8S service (Linode : LKE)
+
+You only care about Worker nodes
+Everything pre-installed
+Master nodes created and managed by Cloud Provider
+You only pay for the worker nodes
+Less effort and time
+
+For Persistent volumes in the use case of Linode , just use the Linode Storage Class and it will allocate Linode Block Storage for your kubernetes workload.
+
+For Ingress in the use case of Linode, juste use the Linode NodeBalancer
+
+Migrating Kubernetes workload on a cloud platform to another is difficult due to Vendor Lockin
+
+Helm - Package Manager
+--------------------------
+
+Package Manager for Kubernetes to package YAML file definitions
+
+Helm Charts
+
+* Bundle of YAML files
+* Create your own Helm Charts with Helm
+* Push them to Helm Repository
+* Download and use existing
+
+helm search <keyword>
+helm install <project> <chartname>
+
+Helm is using templating engine
+
+1/ Define a common blueprint
+2/ Dynamic values are replaced by placeholders -> Defined in values.yaml
+
+This can be very practical as during the CI/CD Build phase you can dynamically replace the variables to have a custom helm package deployment.
+
+You can use Helm Chart to deploy the same application on different environment (namespaces)
+
+Directory Structure
+
+mychart/
+  Chart.yaml
+  values.yaml
+  charts/
+  templates/
+  ...
+
+
+* Top level mychart folder -> Name of the chart
+* Chart.yaml -> Meta info about the chart
+* values.yaml -> Values for the template files
+* charts/ -> Chart dependencies
+* templates/ -> Template folder where you have all the YAML definitions
+
+helm install --values=my-values.yaml <chartname>
+
+Release Management
+
+helm upgrade <chartname>
+
+Helm Version 2
+
+* Client 
+* Server (Tiller)
+
+Helm Version 3
+
+* Client 
+* Use Kubernetes API Server
+
+Helm Demo - Managed K8S Cluster
+-----------------------------------
+
+1/ Create K8S cluster on linode platform using the web interface
+2/ Download the <clustername>-kubeconfig.yaml
+3/ Export KUBECONFIG variable using the path of the kubeconfig file of Linode K8S Cluster (KUBECONFIG=<path/to/kubeconfig.yaml>)
+4/ Verify the connectivity cluster connectivity (kubectl get node)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
